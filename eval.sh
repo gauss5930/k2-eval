@@ -5,25 +5,16 @@
 
 # List of models
 declare -a MODELS=(
-    "meta-llama/Meta-Llama-3-8B-Instruct"
-    "CohereForAI/c4ai-command-r-plus"
+    "gpt-4o"
 )
 
 
 # Iterate over each model in the list
 for MODEL_PATH in "${MODELS[@]}"
 do
-    echo "Downloading Model: $MODEL_PATH"
-    python -c "from huggingface_hub import snapshot_download; snapshot_download('$MODEL_PATH', token='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',local_dir='eval_model/')"
-
     echo "Running text generation for model: $MODEL_PATH"
-    python text_generation.py --model_path eval_model
+    python text_generation.py --model_path eval_model --model_type openai
 
     echo "Evaluating model: $MODEL_PATH"
     python evaluate.py eval_model
-
-    # Clear the Hugging Face cache directory
-    echo "Clearing cache..."
-    rm -rf eval_model
-    rm -rf ~/.cache/huggingface
 done
